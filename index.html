@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Untukmu — Love Story</title>
+
+  <!-- Pratinjau Tautan saat dibagikan (WhatsApp, Instagram, dll.) -->
+  <meta property="og:title" content="Untukmu — Sebuah Kejutan Kecil ✨" />
+  <meta property="og:description" content="Buka tautan ini, nyalakan suaramu, dan sentuh layarnya untuk menumbuhkan bunga." />
+  <meta property="og:type" content="website" />
+
+  <!-- Google Fonts untuk tipografi romantis -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-top: #160922;
+      --bg-mid-1: #341345;
+      --bg-mid-2: #6b2158;
+      --bg-bottom: #b94b70;
+      --accent-pink: #ff8fb1;
+      --accent-gold: #ffd6a5;
+      --glass-bg: rgba(28, 12, 38, 0.55);
+      --glass-border: rgba(255, 194, 214, 0.25);
+      --text-main: #fff5f8;
+      --text-muted: rgba(255, 224, 235, 0.55);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-main);
+      background: linear-gradient(175deg, var(--bg-top) 0%, var(--bg-mid-1) 36%, var(--bg-mid-2) 72%, var(--bg-bottom) 100%);
+      user-select: none;
+    }
+
+    /* Cahaya ambient lembut di latar belakang */
+    .ambient-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 38%, rgba(255, 160, 195, 0.18) 0%, transparent 55%),
+        radial-gradient(circle at 20% 80%, rgba(255, 196, 140, 0.14) 0%, transparent 45%),
+        radial-gradient(circle at 82% 75%, rgba(216, 112, 168, 0.18) 0%, transparent 50%);
+      z-index: 1;
+    }
+
+    /* Canvas utama untuk partikel, kelopak, dan bunga mekar */
+    #gardenCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 2;
+      cursor: pointer;
+    }
+
+    /* Layar Pembuka (Overlay) */
+    .intro-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      background: radial-gradient(circle at center, rgba(44, 15, 58, 0.86) 0%, rgba(18, 7, 28, 0.96) 100%);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: opacity 1.1s ease, visibility 1.1s ease;
+    }
+
+    .intro-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .intro-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      color: var(--accent-gold);
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+      opacity: 0.9;
+    }
+
+    .intro-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2.8rem, 7vw, 4.8rem);
+      font-weight: 400;
+      color: #fff;
+      text-shadow: 0 0 28px rgba(255, 143, 177, 0.65);
+      margin-bottom: 14px;
+      line-height: 1.15;
+    }
+
+    .intro-desc {
+      max-width: 420px;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: rgba(255, 232, 240, 0.8);
+      margin-bottom: 32px;
+    }
+
+    .start-btn {
+      position: relative;
+      padding: 15px 38px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: #260b2e;
+      background: linear-gradient(135deg, #ffd6e4 0%, #ff9ebb 55%, #ffd6a5 100%);
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 8px 30px rgba(255, 143, 177, 0.45), 0 0 0 0 rgba(255, 179, 203, 0.6);
+      animation: pulseGlow 2.4s infinite;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 12px 36px rgba(255, 143, 177, 0.65);
+    }
+
+    .start-btn:active {
+      transform: scale(0.98);
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 8px 28px rgba(255, 143, 177, 0.45), 0 0 0 0 rgba(255, 179, 203, 0.55); }
+      70% { box-shadow: 0 8px 28px rgba(255, 143, 177, 0.45), 0 0 0 16px rgba(255, 179, 203, 0); }
+      100% { box-shadow: 0 8px 28px rgba(255, 143, 177, 0.45), 0 0 0 0 rgba(255, 179, 203, 0); }
+    }
+
+    /* Petunjuk interaktif di atas */
+    .tap-hint {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      padding: 7px 16px;
+      border-radius: 999px;
+      background: rgba(26, 10, 36, 0.42);
+      border: 1px solid rgba(255, 194, 214, 0.2);
+      backdrop-filter: blur(8px);
+      font-size: 0.78rem;
+      color: rgba(255, 232, 240, 0.82);
+      letter-spacing: 0.03em;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    /* Area Lirik Karaoke di Tengah Layar */
+    .lyrics-stage {
+      position: fixed;
+      inset: 0;
+      z-index: 8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px 165px;
+      pointer-events: none;
+      text-align: center;
+    }
+
+    .lyrics-box {
+      max-width: 780px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .lyric-line {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                  filter 0.65s ease;
+      will-change: transform, opacity;
+    }
+
+    .lyric-prev,
+    .lyric-next {
+      font-size: clamp(1.05rem, 2.3vw, 1.45rem);
+      font-style: italic;
+      color: var(--text-muted);
+      opacity: 0.55;
+      transform: scale(0.95);
+    }
+
+    .lyric-active {
+      font-size: clamp(1.65rem, 4.2vw, 2.85rem);
+      font-weight: 600;
+      line-height: 1.32;
+      color: #ffffff;
+      text-shadow:
+        0 0 18px rgba(255, 158, 190, 0.85),
+        0 0 38px rgba(255, 112, 166, 0.55),
+        0 2px 10px rgba(20, 6, 30, 0.6);
+      animation: lyricFocusIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes lyricFocusIn {
+      0% {
+        opacity: 0;
+        transform: translateY(12px) scale(0.94);
+        filter: blur(4px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1.03);
+        filter: blur(0);
+      }
+    }
+
+    /* Pemutar Musik Estetik di Bagian Bawah */
+    .player-wrapper {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      width: calc(100% - 32px);
+      max-width: 560px;
+      padding: 14px 20px;
+      border-radius: 22px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 14px 40px rgba(14, 4, 22, 0.55);
+    }
+
+    .player-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .song-meta {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .disc-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: radial-gradient(circle at 35% 35%, #ffd6e4, #e14b82 65%, #4b1535 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 14px rgba(255, 143, 177, 0.45);
+      animation: spinDisc 12s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .disc-icon.playing {
+      animation-play-state: running;
+    }
+
+    .disc-icon::after {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #1c0b26;
+      border: 2px solid #ffd6a5;
+    }
+
+    @keyframes spinDisc {
+      to { transform: rotate(360deg); }
+    }
+
+    .song-text {
+      min-width: 0;
+    }
+
+    .song-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .song-artist {
+      font-size: 0.76rem;
+      color: rgba(255, 214, 228, 0.75);
+    }
+
+    .file-upload-label {
+      display: none; /* Otomatis muncul hanya jika file love-story.mp3 gagal dimuat */
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: #ffe4ee;
+      background: rgba(255, 158, 190, 0.16);
+      border: 1px solid rgba(255, 182, 206, 0.3);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s ease;
+    }
+
+    .file-upload-label:hover {
+      background: rgba(255, 158, 190, 0.3);
+    }
+
+    #audioFileInput {
+      display: none;
+    }
+
+    /* Progress Bar */
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .time-label {
+      font-size: 0.72rem;
+      font-variant-numeric: tabular-nums;
+      color: rgba(255, 228, 238, 0.78);
+      min-width: 34px;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .progress-slider {
+      flex: 1;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      outline: none;
+    }
+
+    .progress-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #ffd6e4;
+      box-shadow: 0 0 10px rgba(255, 143, 177, 0.9);
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .progress-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.25);
+    }
+
+    /* Kontrol Play & Volume */
+    .controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .play-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, #ff9ebb, #ffd6a5);
+      color: #240a2c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(255, 143, 177, 0.45);
+      transition: transform 0.2s ease;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.07);
+    }
+
+    .volume-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mute-btn {
+      background: none;
+      border: none;
+      color: #ffd6e4;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+    }
+
+    .volume-slider {
+      width: 86px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #ffd6a5;
+      cursor: pointer;
+    }
+
+    @media (max-width: 480px) {
+      .player-wrapper {
+        bottom: 14px;
+        padding: 12px 15px;
+      }
+      .volume-slider {
+        width: 64px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow"></div>
+
+  <!-- Canvas untuk Partikel Cahaya, Kelopak, & Bunga Mekar -->
+  <canvas id="gardenCanvas"></canvas>
+
+  <!-- Layar Pembuka -->
+  <div class="intro-overlay" id="introOverlay">
+    <p class="intro-subtitle">Sebuah Melodi &amp; Taman Bunga</p>
+    <h1 class="intro-title">Untukmu, Tersayang</h1>
+    <p class="intro-desc">
+      Nyalakan suaramu, sentuh layar di mana saja untuk menumbuhkan bunga, dan nikmati setiap bait ceritanya.
+    </p>
+    <button class="start-btn" id="startBtn">Buka Kejutan ✨</button>
+  </div>
+
+  <!-- Petunjuk Interaktif -->
+  <div class="tap-hint">✨ Sentuh atau klik layar di mana saja untuk menumbuhkan bunga</div>
+
+  <!-- Tampilan Lirik Sinkron -->
+  <main class="lyrics-stage" aria-live="polite">
+    <div class="lyrics-box">
+      <div class="lyric-line lyric-prev" id="lyricPrev"></div>
+      <div class="lyric-line lyric-active" id="lyricActive">♪ Mendengarkan melodi... ♪</div>
+      <div class="lyric-line lyric-next" id="lyricNext"></div>
+    </div>
+  </main>
+
+  <!-- Elemen Audio & Pemutar Kustom -->
+  <!-- Pastikan file 'love-story.mp3' berada di folder repository GitHub yang sama -->
+  <audio id="audioPlayer" src="love-story.mp3" preload="metadata"></audio>
+
+  <footer class="player-wrapper">
+    <div class="player-top">
+      <div class="song-meta">
+        <div class="disc-icon" id="discIcon"></div>
+        <div class="song-text">
+          <div class="song-title" id="songTitleDisplay">Love Story (Taylor's Version)</div>
+          <div class="song-artist">Taylor Swift</div>
+        </div>
+      </div>
+
+      <label class="file-upload-label" id="fileUploadLabel" for="audioFileInput" title="Muat file lagu MP3 dari perangkat">
+        📂 Pilih Lagu
+      </label>
+      <input type="file" id="audioFileInput" accept="audio/*" />
+    </div>
+
+    <div class="progress-row">
+      <span class="time-label" id="currentTimeEl">0:00</span>
+      <input type="range" class="progress-slider" id="progressSlider" min="0" max="100" value="0" step="0.1" />
+      <span class="time-label" id="durationEl">0:00</span>
+    </div>
+
+    <div class="controls-row">
+      <button class="play-btn" id="playPauseBtn" aria-label="Putar atau Jeda">
+        <svg id="playIcon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+        <svg id="pauseIcon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
+          <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+        </svg>
+      </button>
+
+      <div class="volume-group">
+        <button class="mute-btn" id="muteBtn" aria-label="Bisukan suara">
+          <svg id="volIcon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+          </svg>
+        </button>
+        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.85" />
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* =========================================================================
+       1. DATA LIRIK BERBASIS TIMESTAMP (DETIK)
+       Disesuaikan untuk "Love Story (Taylor's Version)" (durasi 4:00).
+       Lengkapi baris lirik (dapat dicari melalui Google Search) pada tiap slot detik:
+       ========================================================================= */
+    const lyrics = [
+      { time: 0.0,   text: "♪ Love Story (Taylor's Version) — Taylor Swift ♪" },
+
+      // Verse 1 (00:15)
+      { time: 15.5,  text: "We were both young when I first saw you" },
+      { time: 19.5,  text: "I close my eyes and the flashback starts" },
+      { time: 23.0,  text: "I'm standin' there" },
+      { time: 25.5,  text: "On a balcony in summer air" },
+      { time: 31.0,  text: "♪ Verse 1 — Lanjutkan baris 0:31 hingga 0:46 ♪" },
+
+      // Pre-Chorus 1 (00:47)
+      { time: 47.0,  text: "♪ Pre-Chorus 1 — 0:47 hingga 1:03 ♪" },
+
+      // Chorus 1 (01:04)
+      { time: 64.0,  text: "♪ Chorus 1 — 1:04 hingga 1:21 ♪" },
+
+      // Verse 2 (01:22)
+      { time: 82.5,  text: "♪ Verse 2 — 1:22 hingga 1:39 ♪" },
+
+      // Pre-Chorus 2 (01:40)
+      { time: 100.0, text: "♪ Pre-Chorus 2 — 1:40 hingga 1:55 ♪" },
+
+      // Chorus 2 (01:56)
+      { time: 116.0, text: "♪ Chorus 2 — 1:56 hingga 2:29 ♪" },
+
+      // Instrumental Interlude (02:30)
+      { time: 150.0, text: "♪ ♪ ♪" },
+
+      // Bridge (02:44)
+      { time: 164.0, text: "♪ Bridge — 2:44 hingga 3:16 ♪" },
+
+      // Final Chorus (03:17)
+      { time: 197.0, text: "♪ Final Chorus — 3:17 hingga 3:44 ♪" },
+
+      // Outro (03:45)
+      { time: 225.0, text: "♪ Outro — 3:45 hingga selesai ♪" }
+    ];
+
+    /* =========================================================================
+       2. KONTROL PEMUTAR AUDIO & SINKRONISASI LIRIK KARAOKE
+       ========================================================================= */
+    const audio = document.getElementById("audioPlayer");
+    const introOverlay = document.getElementById("introOverlay");
+    const startBtn = document.getElementById("startBtn");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const playIcon = document.getElementById("playIcon");
+    const pauseIcon = document.getElementById("pauseIcon");
+    const discIcon = document.getElementById("discIcon");
+    const progressSlider = document.getElementById("progressSlider");
+    const currentTimeEl = document.getElementById("currentTimeEl");
+    const durationEl = document.getElementById("durationEl");
+    const volumeSlider = document.getElementById("volumeSlider");
+    const muteBtn = document.getElementById("muteBtn");
+    const audioFileInput = document.getElementById("audioFileInput");
+    const fileUploadLabel = document.getElementById("fileUploadLabel");
+    const songTitleDisplay = document.getElementById("songTitleDisplay");
+
+    const lyricPrevEl = document.getElementById("lyricPrev");
+    const lyricActiveEl = document.getElementById("lyricActive");
+    const lyricNextEl = document.getElementById("lyricNext");
+
+    let currentLyricIndex = -1;
+    audio.volume = 0.85;
+
+    // Tampilkan tombol unggah cadangan hanya jika love-story.mp3 tidak ditemukan
+    audio.addEventListener("error", () => {
+      fileUploadLabel.style.display = "inline-block";
+    });
+
+    function formatTime(sec) {
+      if (!isFinite(sec) || sec < 0) return "0:00";
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m}:${s < 10 ? "0" : ""}${s}`;
+    }
+
+    function updatePlayStateUI(isPlaying) {
+      playIcon.style.display = isPlaying ? "none" : "block";
+      pauseIcon.style.display = isPlaying ? "block" : "none";
+      discIcon.classList.toggle("playing", isPlaying);
+    }
+
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play().then(() => updatePlayStateUI(true)).catch(() => {
+          updatePlayStateUI(false);
+          fileUploadLabel.style.display = "inline-block";
+        });
+      } else {
+        audio.pause();
+        updatePlayStateUI(false);
+      }
+    }
+
+    // Tombol pembuka "Buka Kejutan"
+    startBtn.addEventListener("click", () => {
+      introOverlay.classList.add("hidden");
+      spawnInitialGarden();
+      audio.play().then(() => {
+        updatePlayStateUI(true);
+      }).catch(() => {
+        fileUploadLabel.style.display = "inline-block";
+        lyricActiveEl.textContent = "Pilih file lagu MP3 di bawah untuk memutar musik ♪";
+      });
+    });
+
+    playPauseBtn.addEventListener("click", togglePlay);
+
+    // Muat file audio lokal jika menggunakan tombol cadangan
+    audioFileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const objectUrl = URL.createObjectURL(file);
+      audio.src = objectUrl;
+      songTitleDisplay.textContent = file.name.replace(/\.[^/.]+$/, "");
+      currentLyricIndex = -1;
+      audio.play().then(() => updatePlayStateUI(true));
+    });
+
+    audio.addEventListener("loadedmetadata", () => {
+      durationEl.textContent = formatTime(audio.duration);
+      progressSlider.max = audio.duration || 100;
+    });
+
+    audio.addEventListener("ended", () => {
+      updatePlayStateUI(false);
+    });
+
+    // Progress bar scrubbing
+    progressSlider.addEventListener("input", () => {
+      audio.currentTime = parseFloat(progressSlider.value);
+    });
+
+    // Volume & Mute
+    volumeSlider.addEventListener("input", () => {
+      audio.volume = parseFloat(volumeSlider.value);
+      audio.muted = audio.volume === 0;
+    });
+
+    muteBtn.addEventListener("click", () => {
+      audio.muted = !audio.muted;
+      volumeSlider.value = audio.muted ? 0 : (audio.volume || 0.8);
+    });
+
+    // Pembaruan lirik sinkron (Karaoke-style)
+    function syncLyrics(currentTime) {
+      let activeIdx = 0;
+      for (let i = 0; i < lyrics.length; i++) {
+        if (currentTime >= lyrics[i].time) {
+          activeIdx = i;
+        } else {
+          break;
+        }
+      }
+
+      if (activeIdx !== currentLyricIndex) {
+        currentLyricIndex = activeIdx;
+
+        lyricPrevEl.textContent = activeIdx > 0 ? lyrics[activeIdx - 1].text : "";
+        lyricNextEl.textContent = activeIdx < lyrics.length - 1 ? lyrics[activeIdx + 1].text : "";
+
+        // Memicu ulang animasi fade-in & zoom-in saat baris berganti
+        lyricActiveEl.style.animation = "none";
+        void lyricActiveEl.offsetWidth;
+        lyricActiveEl.textContent = lyrics[activeIdx].text;
+        lyricActiveEl.style.animation = "";
+      }
+    }
+
+    audio.addEventListener("timeupdate", () => {
+      const t = audio.currentTime;
+      currentTimeEl.textContent = formatTime(t);
+      if (!progressSlider.matches(":active")) {
+        progressSlider.value = t;
+      }
+      syncLyrics(t);
+    });
+
+    /* =========================================================================
+       3. ENGINE ANIMASI 60FPS: PARTIKEL CAHAYA, KELOPAK, & BUNGA MEKAR ORGANIK
+       Mendukung Mawar (Rose), Sakura, dan Tulip + Klik/Sentuh untuk Mekar
+       ========================================================================= */
+    const canvas = document.getElementById("gardenCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+
+    function resizeCanvas() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function easeOutCubic(t) {
+      return 1 - Math.pow(1 - t, 3);
+    }
+    function easeOutBack(t) {
+      const c1 = 1.70158;
+      const c3 = c1 + 1;
+      return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+    }
+
+    // --- Partikel Cahaya Hangat ---
+    const particles = [];
+    const PARTICLE_COUNT = Math.min(55, Math.floor((width * height) / 18000));
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: 1.2 + Math.random() * 2.8,
+        vy: -0.18 - Math.random() * 0.35,
+        vx: (Math.random() - 0.5) * 0.25,
+        phase: Math.random() * Math.PI * 2,
+        hue: Math.random() > 0.45 ? "255, 214, 165" : "255, 165, 200"
+      });
+    }
+
+    // --- Kelopak Bunga Melayang ---
+    const petals = [];
+    const PETAL_COUNT = Math.min(34, Math.floor(width / 32));
+
+    function createPetal(randomY = false) {
+      const colors = ["#ffb3c6", "#ff8fab", "#ffc2d1", "#ffe5ec", "#f49cbb"];
+      return {
+        x: Math.random() * width,
+        y: randomY ? Math.random() * height : -20 - Math.random() * 80,
+        size: 6 + Math.random() * 7,
+        vy: 0.45 + Math.random() * 0.75,
+        swayAmp: 0.6 + Math.random() * 1.1,
+        swayFreq: 0.012 + Math.random() * 0.015,
+        angle: Math.random() * Math.PI * 2,
+        vAngle: (Math.random() - 0.5) * 0.03,
+        phase: Math.random() * Math.PI * 2,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        alpha: 0.45 + Math.random() * 0.4
+      };
+    }
+
+    for (let i = 0; i < PETAL_COUNT; i++) {
+      petals.push(createPetal(true));
+    }
+
+    // --- Riak Cahaya saat Layar Diklik ---
+    const ripples = [];
+
+    // --- Koleksi Bunga Mekar Organik ---
+    const flowers = [];
+    const MAX_FLOWERS = 46;
+    const FLOWER_TYPES = ["rose", "sakura", "tulip"];
+
+    class BloomingFlower {
+      constructor({ x, y, stemHeight, type, scale = 1, delay = 0, isUserSpawned = false }) {
+        this.targetX = x;
+        this.targetY = y;
+        this.stemHeight = stemHeight;
+        this.baseX = x + (Math.random() - 0.5) * 26;
+        this.baseY = y + stemHeight;
+        this.ctrlX = (this.baseX + x) / 2 + (Math.random() - 0.5) * 34;
+        this.ctrlY = (this.baseY + y) / 2;
+
+        this.type = type;
+        this.maxScale = scale;
+        this.delay = delay;
+        this.isUserSpawned = isUserSpawned;
+
+        this.age = 0;
+        this.stemDuration = stemHeight > 0 ? 1.1 : 0.01;
+        this.bloomDuration = 1.4;
+        this.swayPhase = Math.random() * Math.PI * 2;
+        this.rotation = (Math.random() - 0.5) * 0.35;
+        this.alpha = 1;
+        this.fadingOut = false;
+
+        if (type === "rose") {
+          const palettes = [
+            { outer: "#be123c", mid: "#e11d48", inner: "#fb7185", core: "#ffe4e6" },
+            { outer: "#9d174d", mid: "#db2777", inner: "#f472b6", core: "#fce7f3" },
+            { outer: "#e11d48", mid: "#fb7185", inner: "#fda4af", core: "#fff1f2" }
+          ];
+          this.palette = palettes[Math.floor(Math.random() * palettes.length)];
+        } else if (type === "sakura") {
+          const palettes = [
+            { petal: "#fbcfe8", tip: "#fff1f2", center: "#be185d", stamen: "#fde047" },
+            { petal: "#f9a8d4", tip: "#fce7f3", center: "#9d174d", stamen: "#fef08a" }
+          ];
+          this.palette = palettes[Math.floor(Math.random() * palettes.length)];
+        } else {
+          const palettes = [
+            { left: "#e11d48", right: "#fb7185", center: "#fda4af" },
+            { left: "#db2777", right: "#f472b6", center: "#fbcfe8" },
+            { left: "#c026d3", right: "#e879f9", center: "#fae8ff" }
+          ];
+          this.palette = palettes[Math.floor(Math.random() * palettes.length)];
+        }
+      }
+
+      update(dt, time) {
+        if (this.delay > 0) {
+          this.delay -= dt;
+          return;
+        }
+        this.age += dt;
+        if (this.fadingOut) {
+          this.alpha -= dt * 0.6;
+        }
+        this.currentSway = Math.sin(time * 1.4 + this.swayPhase) * 4.5 * this.maxScale;
+      }
+
+      draw(ctx) {
+        if (this.delay > 0 || this.alpha <= 0) return;
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, this.alpha);
+
+        const stemProgress = Math.min(1, this.age / this.stemDuration);
+        const easedStem = easeOutCubic(stemProgress);
+
+        const bloomRaw = Math.max(0, (this.age - this.stemDuration * 0.55) / this.bloomDuration);
+        const bloomProgress = Math.min(1, bloomRaw);
+        const easedBloom = easeOutBack(bloomProgress);
+
+        const headX = this.targetX + this.currentSway * easedStem;
+        const headY = this.targetY;
+
+        if (this.stemHeight > 0 && easedStem > 0) {
+          const curX = this.baseX + (headX - this.baseX) * easedStem;
+          const curY = this.baseY + (headY - this.baseY) * easedStem;
+          const curCtrlX = this.baseX + (this.ctrlX + this.currentSway * 0.5 - this.baseX) * easedStem;
+          const curCtrlY = this.baseY + (this.ctrlY - this.baseY) * easedStem;
+
+          const stemGrad = ctx.createLinearGradient(this.baseX, this.baseY, curX, curY);
+          stemGrad.addColorStop(0, "#143d29");
+          stemGrad.addColorStop(1, "#2d6a4f");
+
+          ctx.strokeStyle = stemGrad;
+          ctx.lineWidth = 2.6 * this.maxScale;
+          ctx.lineCap = "round";
+          ctx.beginPath();
+          ctx.moveTo(this.baseX, this.baseY);
+          ctx.quadraticCurveTo(curCtrlX, curCtrlY, curX, curY);
+          ctx.stroke();
+
+          if (easedStem > 0.45) {
+            const leafScale = Math.min(1, (easedStem - 0.45) / 0.55) * this.maxScale;
+            const leafX = (this.baseX + curX) * 0.52;
+            const leafY = (this.baseY + curY) * 0.55;
+            this.drawLeaf(ctx, leafX, leafY, -0.65, leafScale);
+            if (this.stemHeight > 90) {
+              this.drawLeaf(ctx, leafX + 3, leafY - 18 * leafScale, 0.65, leafScale * 0.88);
+            }
+          }
+        }
+
+        if (bloomProgress > 0) {
+          const drawX = this.stemHeight > 0
+            ? this.baseX + (headX - this.baseX) * easedStem
+            : headX;
+          const drawY = this.stemHeight > 0
+            ? this.baseY + (headY - this.baseY) * easedStem
+            : headY;
+
+          ctx.translate(drawX, drawY);
+          ctx.rotate(this.rotation + this.currentSway * 0.015);
+          const s = Math.max(0.01, easedBloom * this.maxScale);
+          ctx.scale(s, s);
+
+          if (this.type === "rose") {
+            this.drawRose(ctx, bloomProgress);
+          } else if (this.type === "sakura") {
+            this.drawSakura(ctx, bloomProgress);
+          } else {
+            this.drawTulip(ctx, bloomProgress);
+          }
+        }
+
+        ctx.restore();
+      }
+
+      drawLeaf(ctx, x, y, angle, scale) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(angle);
+        ctx.scale(scale, scale);
+
+        ctx.fillStyle = "#2d6a4f";
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(14, -10, 28, 0);
+        ctx.quadraticCurveTo(14, 10, 0, 0);
+        ctx.fill();
+
+        ctx.strokeStyle = "#52b788";
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        ctx.moveTo(2, 0);
+        ctx.lineTo(23, 0);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      drawRose(ctx, progress) {
+        const layers = [
+          { count: 6, radius: 22, color: this.palette.outer, rotOffset: 0 },
+          { count: 5, radius: 16, color: this.palette.mid, rotOffset: 0.5 },
+          { count: 4, radius: 10.5, color: this.palette.inner, rotOffset: 1.0 },
+          { count: 3, radius: 5.5, color: this.palette.core, rotOffset: 1.6 }
+        ];
+
+        layers.forEach((layer, idx) => {
+          const layerOpen = Math.min(1, progress * (1.35 - idx * 0.12));
+          for (let i = 0; i < layer.count; i++) {
+            ctx.save();
+            const theta = (i / layer.count) * Math.PI * 2 + layer.rotOffset;
+            ctx.rotate(theta);
+            const r = layer.radius * (0.45 + 0.55 * layerOpen);
+
+            ctx.fillStyle = layer.color;
+            ctx.shadowColor = "rgba(25, 4, 18, 0.35)";
+            ctx.shadowBlur = 4;
+
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.bezierCurveTo(-r * 0.85, -r * 0.4, -r * 0.9, -r * 1.35, 0, -r * 1.45);
+            ctx.bezierCurveTo(r * 0.9, -r * 1.35, r * 0.85, -r * 0.4, 0, 0);
+            ctx.fill();
+            ctx.restore();
+          }
+        });
+      }
+
+      drawSakura(ctx, progress) {
+        const petalCount = 5;
+        const r = 24 * (0.4 + 0.6 * progress);
+
+        for (let i = 0; i < petalCount; i++) {
+          ctx.save();
+          ctx.rotate((i / petalCount) * Math.PI * 2);
+
+          const grad = ctx.createLinearGradient(0, 0, 0, -r * 1.4);
+          grad.addColorStop(0, this.palette.center);
+          grad.addColorStop(0.35, this.palette.petal);
+          grad.addColorStop(1, this.palette.tip);
+
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(-r * 0.65, -r * 0.45, -r * 0.65, -r * 1.2, -r * 0.14, -r * 1.38);
+          ctx.lineTo(0, -r * 1.2);
+          ctx.lineTo(r * 0.14, -r * 1.38);
+          ctx.bezierCurveTo(r * 0.65, -r * 1.2, r * 0.65, -r * 0.45, 0, 0);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        ctx.fillStyle = this.palette.center;
+        ctx.beginPath();
+        ctx.arc(0, 0, 4.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        for (let s = 0; s < 8; s++) {
+          const ang = (s / 8) * Math.PI * 2;
+          const len = 8.5 * progress;
+          ctx.strokeStyle = this.palette.stamen;
+          ctx.lineWidth = 0.9;
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.lineTo(Math.cos(ang) * len, Math.sin(ang) * len);
+          ctx.stroke();
+
+          ctx.fillStyle = this.palette.stamen;
+          ctx.beginPath();
+          ctx.arc(Math.cos(ang) * len, Math.sin(ang) * len, 1.3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      drawTulip(ctx, progress) {
+        const openSpread = 0.25 + 0.75 * progress;
+        const h = 34;
+        const w = 15;
+
+        ctx.fillStyle = this.palette.center;
+        ctx.beginPath();
+        ctx.moveTo(0, 4);
+        ctx.bezierCurveTo(-w * 0.9, -h * 0.4, -w * 0.6, -h * 1.05, 0, -h * 1.12);
+        ctx.bezierCurveTo(w * 0.6, -h * 1.05, w * 0.9, -h * 0.4, 0, 4);
+        ctx.fill();
+
+        ctx.save();
+        ctx.rotate(-0.22 * openSpread);
+        ctx.fillStyle = this.palette.left;
+        ctx.beginPath();
+        ctx.moveTo(0, 4);
+        ctx.bezierCurveTo(-w * 1.25, -h * 0.2, -w * 1.1, -h * 0.95, -w * 0.15, -h * 1.04);
+        ctx.bezierCurveTo(w * 0.35, -h * 0.7, w * 0.3, -h * 0.2, 0, 4);
+        ctx.fill();
+        ctx.restore();
+
+        ctx.save();
+        ctx.rotate(0.22 * openSpread);
+        ctx.fillStyle = this.palette.right;
+        ctx.beginPath();
+        ctx.moveTo(0, 4);
+        ctx.bezierCurveTo(w * 1.25, -h * 0.2, w * 1.1, -h * 0.95, w * 0.15, -h * 1.04);
+        ctx.bezierCurveTo(-w * 0.35, -h * 0.7, -w * 0.3, -h * 0.2, 0, 4);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function addFlower(config) {
+      if (flowers.length >= MAX_FLOWERS) {
+        const oldestUserFlower = flowers.find(f => f.isUserSpawned && !f.fadingOut);
+        if (oldestUserFlower) {
+          oldestUserFlower.fadingOut = true;
+        }
+      }
+      flowers.push(new BloomingFlower(config));
+    }
+
+    function spawnInitialGarden() {
+      flowers.length = 0;
+
+      const bottomCount = width < 600 ? 7 : 13;
+      for (let i = 0; i < bottomCount; i++) {
+        const ratio = (i + 0.5) / bottomCount;
+        const x = ratio * width + (Math.random() - 0.5) * 25;
+        const stemH = 75 + Math.random() * 95;
+        const type = FLOWER_TYPES[i % FLOWER_TYPES.length];
+        addFlower({
+          x,
+          y: height - stemH,
+          stemHeight: stemH,
+          type,
+          scale: (width < 600 ? 0.78 : 0.95) + Math.random() * 0.25,
+          delay: i * 0.14
+        });
+      }
+
+      const cornerSpots = [
+        { x: 42, y: 85, type: "sakura", scale: 0.95, delay: 0.4 },
+        { x: 88, y: 130, type: "rose", scale: 0.85, delay: 0.7 },
+        { x: width - 46, y: 92, type: "sakura", scale: 0.95, delay: 0.5 },
+        { x: width - 92, y: 138, type: "tulip", scale: 0.85, delay: 0.8 },
+        { x: width * 0.14, y: height * 0.46, type: "sakura", scale: 0.75, delay: 1.1 },
+        { x: width * 0.86, y: height * 0.48, type: "rose", scale: 0.75, delay: 1.25 }
+      ];
+
+      cornerSpots.forEach(spot => {
+        addFlower({
+          x: spot.x,
+          y: spot.y,
+          stemHeight: 0,
+          type: spot.type,
+          scale: width < 600 ? spot.scale * 0.8 : spot.scale,
+          delay: spot.delay
+        });
+      });
+    }
+
+    function handleCanvasInteract(clientX, clientY) {
+      const randomType = FLOWER_TYPES[Math.floor(Math.random() * FLOWER_TYPES.length)];
+      const stemH = clientY > height * 0.68 ? Math.min(85, height - clientY) : 0;
+
+      addFlower({
+        x: clientX,
+        y: clientY,
+        stemHeight: stemH,
+        type: randomType,
+        scale: 0.85 + Math.random() * 0.35,
+        delay: 0,
+        isUserSpawned: true
+      });
+
+      ripples.push({
+        x: clientX,
+        y: clientY,
+        radius: 4,
+        maxRadius: 46,
+        alpha: 0.75
+      });
+    }
+
+    canvas.addEventListener("pointerdown", (e) => {
+      handleCanvasInteract(e.clientX, e.clientY);
+    });
+
+    // Loop Animasi Utama 60fps
+    let lastTimestamp = performance.now();
+
+    function animate(now) {
+      const dt = Math.min(0.05, (now - lastTimestamp) / 1000);
+      lastTimestamp = now;
+      const timeSec = now / 1000;
+
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.y < -10) {
+          p.y = height + 10;
+          p.x = Math.random() * width;
+        }
+        if (p.x < -10) p.x = width + 10;
+        if (p.x > width + 10) p.x = -10;
+
+        const twinkle = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(timeSec * 2.2 + p.phase));
+        ctx.fillStyle = `rgba(${p.hue}, ${twinkle})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      for (let i = 0; i < petals.length; i++) {
+        const pt = petals[i];
+        pt.y += pt.vy;
+        pt.x += Math.sin(pt.y * pt.swayFreq + pt.phase) * pt.swayAmp;
+        pt.angle += pt.vAngle;
+
+        if (pt.y > height + 25) {
+          Object.assign(pt, createPetal(false));
+        }
+
+        ctx.save();
+        ctx.translate(pt.x, pt.y);
+        ctx.rotate(pt.angle);
+        ctx.scale(1, 0.6 + 0.4 * Math.sin(timeSec * 2 + pt.phase));
+        ctx.globalAlpha = pt.alpha;
+        ctx.fillStyle = pt.color;
+        ctx.beginPath();
+        ctx.moveTo(0, -pt.size);
+        ctx.bezierCurveTo(pt.size, -pt.size * 0.5, pt.size * 0.8, pt.size, 0, pt.size);
+        ctx.bezierCurveTo(-pt.size * 0.8, pt.size, -pt.size, -pt.size * 0.5, 0, -pt.size);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        const rp = ripples[i];
+        rp.radius += dt * 75;
+        rp.alpha -= dt * 1.1;
+        if (rp.alpha <= 0) {
+          ripples.splice(i, 1);
+          continue;
+        }
+        ctx.save();
+        ctx.strokeStyle = `rgba(255, 214, 228, ${rp.alpha})`;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(rp.x, rp.y, rp.radius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      for (let i = flowers.length - 1; i >= 0; i--) {
+        const fl = flowers[i];
+        fl.update(dt, timeSec);
+        if (fl.alpha <= 0) {
+          flowers.splice(i, 1);
+          continue;
+        }
+        fl.draw(ctx);
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
