@@ -7,13 +7,13 @@
 
   <!-- Pratinjau Tautan saat dibagikan (WhatsApp, Instagram, dll.) -->
   <meta property="og:title" content="Untukmu — Sebuah Kejutan Kecil ✨" />
-  <meta property="og:description" content="Buka tautan ini, nyalakan suaramu, dan sentuh layarnya untuk menumbuhkan bunga." />
+  <meta property="og:description" content="Buka tautan ini, nyalakan suaramu, dan lihat bunga-bunga bermekaran." />
   <meta property="og:type" content="website" />
 
   <!-- Google Fonts untuk tipografi romantis -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Plus+Jakarta+Sans:wght@500;600&display=swap" rel="stylesheet" />
 
   <style>
     :root {
@@ -21,12 +21,8 @@
       --bg-mid-1: #341345;
       --bg-mid-2: #6b2158;
       --bg-bottom: #b94b70;
-      --accent-pink: #ff8fb1;
-      --accent-gold: #ffd6a5;
-      --glass-bg: rgba(28, 12, 38, 0.55);
-      --glass-border: rgba(255, 194, 214, 0.25);
       --text-main: #fff5f8;
-      --text-muted: rgba(255, 224, 235, 0.55);
+      --text-muted: rgba(255, 224, 235, 0.52);
     }
 
     * {
@@ -52,13 +48,13 @@
       inset: 0;
       pointer-events: none;
       background:
-        radial-gradient(circle at 50% 38%, rgba(255, 160, 195, 0.18) 0%, transparent 55%),
-        radial-gradient(circle at 20% 80%, rgba(255, 196, 140, 0.14) 0%, transparent 45%),
-        radial-gradient(circle at 82% 75%, rgba(216, 112, 168, 0.18) 0%, transparent 50%);
+        radial-gradient(circle at 50% 36%, rgba(255, 160, 195, 0.2) 0%, transparent 56%),
+        radial-gradient(circle at 20% 82%, rgba(255, 196, 140, 0.16) 0%, transparent 48%),
+        radial-gradient(circle at 82% 78%, rgba(216, 112, 168, 0.2) 0%, transparent 52%);
       z-index: 1;
     }
 
-    /* Canvas utama untuk partikel, kelopak, dan bunga mekar */
+    /* Canvas utama untuk partikel, kelopak, dan taman bunga mekar */
     #gardenCanvas {
       position: fixed;
       inset: 0;
@@ -69,109 +65,51 @@
       cursor: pointer;
     }
 
-    /* Layar Pembuka (Overlay) */
-    .intro-overlay {
+    /* 3 Tombol Tap Acak (muncul 300ms, jeda 1 detik) */
+    .random-tap-btn {
       position: fixed;
-      inset: 0;
-      z-index: 50;
-      display: flex;
-      flex-direction: column;
+      z-index: 25;
+      display: none;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      padding: 24px;
-      background: radial-gradient(circle at center, rgba(44, 15, 58, 0.86) 0%, rgba(18, 7, 28, 0.96) 100%);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      transition: opacity 1.1s ease, visibility 1.1s ease;
-    }
-
-    .intro-overlay.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .intro-subtitle {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-      color: var(--accent-gold);
-      letter-spacing: 0.08em;
-      margin-bottom: 8px;
-      opacity: 0.9;
-    }
-
-    .intro-title {
-      font-family: 'Great Vibes', cursive;
-      font-size: clamp(2.8rem, 7vw, 4.8rem);
-      font-weight: 400;
+      transform: translate(-50%, -50%);
+      padding: 9px 20px;
+      border-radius: 999px;
+      border: 1.5px solid rgba(255, 224, 236, 0.85);
+      background: radial-gradient(circle at 30% 30%, rgba(255, 182, 206, 0.92), rgba(225, 75, 130, 0.88));
       color: #fff;
-      text-shadow: 0 0 28px rgba(255, 143, 177, 0.65);
-      margin-bottom: 14px;
-      line-height: 1.15;
-    }
-
-    .intro-desc {
-      max-width: 420px;
-      font-size: 0.92rem;
-      line-height: 1.6;
-      color: rgba(255, 232, 240, 0.8);
-      margin-bottom: 32px;
-    }
-
-    .start-btn {
-      position: relative;
-      padding: 15px 38px;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 1rem;
+      font-size: 0.82rem;
       font-weight: 600;
-      letter-spacing: 0.05em;
-      color: #260b2e;
-      background: linear-gradient(135deg, #ffd6e4 0%, #ff9ebb 55%, #ffd6a5 100%);
-      border: none;
-      border-radius: 999px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      box-shadow:
+        0 0 18px rgba(255, 143, 177, 0.85),
+        0 0 34px rgba(255, 214, 165, 0.55);
       cursor: pointer;
-      box-shadow: 0 8px 30px rgba(255, 143, 177, 0.45), 0 0 0 0 rgba(255, 179, 203, 0.6);
-      animation: pulseGlow 2.4s infinite;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      animation: tapPop 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
-    .start-btn:hover {
-      transform: translateY(-2px) scale(1.03);
-      box-shadow: 0 12px 36px rgba(255, 143, 177, 0.65);
+    .random-tap-btn.visible {
+      display: flex;
     }
 
-    .start-btn:active {
-      transform: scale(0.98);
+    .random-tap-btn:active {
+      transform: translate(-50%, -50%) scale(0.9);
     }
 
-    @keyframes pulseGlow {
-      0% { box-shadow: 0 8px 28px rgba(255, 143, 177, 0.45), 0 0 0 0 rgba(255, 179, 203, 0.55); }
-      70% { box-shadow: 0 8px 28px rgba(255, 143, 177, 0.45), 0 0 0 16px rgba(255, 179, 203, 0); }
-      100% { box-shadow: 0 8px 28px rgba(255, 143, 177, 0.45), 0 0 0 0 rgba(255, 179, 203, 0); }
+    @keyframes tapPop {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.65);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
     }
 
-    /* Petunjuk interaktif di atas */
-    .tap-hint {
-      position: fixed;
-      top: 18px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-      padding: 7px 16px;
-      border-radius: 999px;
-      background: rgba(26, 10, 36, 0.42);
-      border: 1px solid rgba(255, 194, 214, 0.2);
-      backdrop-filter: blur(8px);
-      font-size: 0.78rem;
-      color: rgba(255, 232, 240, 0.82);
-      letter-spacing: 0.03em;
-      pointer-events: none;
-      white-space: nowrap;
-    }
-
-    /* Area Lirik Karaoke di Tengah Layar */
+    /* Area Lirik Karaoke di Tengah Atas-Tengah Layar */
     .lyrics-stage {
       position: fixed;
       inset: 0;
@@ -180,13 +118,13 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 80px 24px 165px;
+      padding: 40px 24px 140px;
       pointer-events: none;
       text-align: center;
     }
 
     .lyrics-box {
-      max-width: 780px;
+      max-width: 800px;
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -204,7 +142,7 @@
 
     .lyric-prev,
     .lyric-next {
-      font-size: clamp(1.05rem, 2.3vw, 1.45rem);
+      font-size: clamp(1.08rem, 2.3vw, 1.5rem);
       font-style: italic;
       color: var(--text-muted);
       opacity: 0.55;
@@ -212,14 +150,14 @@
     }
 
     .lyric-active {
-      font-size: clamp(1.65rem, 4.2vw, 2.85rem);
+      font-size: clamp(1.75rem, 4.4vw, 3rem);
       font-weight: 600;
       line-height: 1.32;
       color: #ffffff;
       text-shadow:
-        0 0 18px rgba(255, 158, 190, 0.85),
-        0 0 38px rgba(255, 112, 166, 0.55),
-        0 2px 10px rgba(20, 6, 30, 0.6);
+        0 0 18px rgba(255, 158, 190, 0.9),
+        0 0 38px rgba(255, 112, 166, 0.6),
+        0 2px 12px rgba(20, 6, 30, 0.65);
       animation: lyricFocusIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
@@ -235,309 +173,37 @@
         filter: blur(0);
       }
     }
-
-    /* Pemutar Musik Estetik di Bagian Bawah */
-    .player-wrapper {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 20;
-      width: calc(100% - 32px);
-      max-width: 560px;
-      padding: 14px 20px;
-      border-radius: 22px;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      box-shadow: 0 14px 40px rgba(14, 4, 22, 0.55);
-    }
-
-    .player-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-
-    .song-meta {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      min-width: 0;
-    }
-
-    .disc-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      background: radial-gradient(circle at 35% 35%, #ffd6e4, #e14b82 65%, #4b1535 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 14px rgba(255, 143, 177, 0.45);
-      animation: spinDisc 12s linear infinite;
-      animation-play-state: paused;
-    }
-
-    .disc-icon.playing {
-      animation-play-state: running;
-    }
-
-    .disc-icon::after {
-      content: "";
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #1c0b26;
-      border: 2px solid #ffd6a5;
-    }
-
-    @keyframes spinDisc {
-      to { transform: rotate(360deg); }
-    }
-
-    .song-text {
-      min-width: 0;
-    }
-
-    .song-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: #fff;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .song-artist {
-      font-size: 0.76rem;
-      color: rgba(255, 214, 228, 0.75);
-    }
-
-    .file-upload-label {
-      display: none; /* Otomatis muncul hanya jika file love-story.mp3 gagal dimuat */
-      padding: 6px 11px;
-      border-radius: 999px;
-      font-size: 0.72rem;
-      font-weight: 500;
-      color: #ffe4ee;
-      background: rgba(255, 158, 190, 0.16);
-      border: 1px solid rgba(255, 182, 206, 0.3);
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.2s ease;
-    }
-
-    .file-upload-label:hover {
-      background: rgba(255, 158, 190, 0.3);
-    }
-
-    #audioFileInput {
-      display: none;
-    }
-
-    /* Progress Bar */
-    .progress-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .time-label {
-      font-size: 0.72rem;
-      font-variant-numeric: tabular-nums;
-      color: rgba(255, 228, 238, 0.78);
-      min-width: 34px;
-    }
-
-    input[type="range"] {
-      -webkit-appearance: none;
-      appearance: none;
-      background: transparent;
-      cursor: pointer;
-    }
-
-    .progress-slider {
-      flex: 1;
-      height: 5px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.18);
-      outline: none;
-    }
-
-    .progress-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 13px;
-      height: 13px;
-      border-radius: 50%;
-      background: #ffd6e4;
-      box-shadow: 0 0 10px rgba(255, 143, 177, 0.9);
-      cursor: pointer;
-      transition: transform 0.15s ease;
-    }
-
-    .progress-slider::-webkit-slider-thumb:hover {
-      transform: scale(1.25);
-    }
-
-    /* Kontrol Play & Volume */
-    .controls-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .play-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: none;
-      background: linear-gradient(135deg, #ff9ebb, #ffd6a5);
-      color: #240a2c;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 16px rgba(255, 143, 177, 0.45);
-      transition: transform 0.2s ease;
-    }
-
-    .play-btn:hover {
-      transform: scale(1.07);
-    }
-
-    .volume-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .mute-btn {
-      background: none;
-      border: none;
-      color: #ffd6e4;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px;
-    }
-
-    .volume-slider {
-      width: 86px;
-      height: 4px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .volume-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
-      background: #ffd6a5;
-      cursor: pointer;
-    }
-
-    @media (max-width: 480px) {
-      .player-wrapper {
-        bottom: 14px;
-        padding: 12px 15px;
-      }
-      .volume-slider {
-        width: 64px;
-      }
-    }
   </style>
 </head>
 <body>
 
   <div class="ambient-glow"></div>
 
-  <!-- Canvas untuk Partikel Cahaya, Kelopak, & Bunga Mekar -->
+  <!-- Canvas untuk Partikel Cahaya, Kelopak, & Taman Bunga Mekar 15 Detik -->
   <canvas id="gardenCanvas"></canvas>
 
-  <!-- Layar Pembuka -->
-  <div class="intro-overlay" id="introOverlay">
-    <p class="intro-subtitle">Sebuah Melodi &amp; Taman Bunga</p>
-    <h1 class="intro-title">Untukmu, Tersayang</h1>
-    <p class="intro-desc">
-      Nyalakan suaramu, sentuh layar di mana saja untuk menumbuhkan bunga, dan nikmati setiap bait ceritanya.
-    </p>
-    <button class="start-btn" id="startBtn">Buka Kejutan ✨</button>
-  </div>
-
-  <!-- Petunjuk Interaktif -->
-  <div class="tap-hint">✨ Sentuh atau klik layar di mana saja untuk menumbuhkan bunga</div>
+  <!-- 3 Tombol Tap Acak (muncul 300ms, jeda 1000ms) -->
+  <button class="random-tap-btn" id="tapBtn0" type="button">Tap ✨</button>
+  <button class="random-tap-btn" id="tapBtn1" type="button">Tap ✨</button>
+  <button class="random-tap-btn" id="tapBtn2" type="button">Tap ✨</button>
 
   <!-- Tampilan Lirik Sinkron -->
   <main class="lyrics-stage" aria-live="polite">
     <div class="lyrics-box">
       <div class="lyric-line lyric-prev" id="lyricPrev"></div>
-      <div class="lyric-line lyric-active" id="lyricActive">♪ Mendengarkan melodi... ♪</div>
+      <div class="lyric-line lyric-active" id="lyricActive">♪ Love Story — Taylor Swift ♪</div>
       <div class="lyric-line lyric-next" id="lyricNext"></div>
     </div>
   </main>
 
-  <!-- Elemen Audio & Pemutar Kustom -->
-  <!-- Pastikan file 'love-story.mp3' berada di folder repository GitHub yang sama -->
-  <audio id="audioPlayer" src="love-story.mp3" preload="metadata"></audio>
-
-  <footer class="player-wrapper">
-    <div class="player-top">
-      <div class="song-meta">
-        <div class="disc-icon" id="discIcon"></div>
-        <div class="song-text">
-          <div class="song-title" id="songTitleDisplay">Love Story (Taylor's Version)</div>
-          <div class="song-artist">Taylor Swift</div>
-        </div>
-      </div>
-
-      <label class="file-upload-label" id="fileUploadLabel" for="audioFileInput" title="Muat file lagu MP3 dari perangkat">
-        📂 Pilih Lagu
-      </label>
-      <input type="file" id="audioFileInput" accept="audio/*" />
-    </div>
-
-    <div class="progress-row">
-      <span class="time-label" id="currentTimeEl">0:00</span>
-      <input type="range" class="progress-slider" id="progressSlider" min="0" max="100" value="0" step="0.1" />
-      <span class="time-label" id="durationEl">0:00</span>
-    </div>
-
-    <div class="controls-row">
-      <button class="play-btn" id="playPauseBtn" aria-label="Putar atau Jeda">
-        <svg id="playIcon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M8 5v14l11-7z" />
-        </svg>
-        <svg id="pauseIcon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
-          <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-        </svg>
-      </button>
-
-      <div class="volume-group">
-        <button class="mute-btn" id="muteBtn" aria-label="Bisukan suara">
-          <svg id="volIcon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
-          </svg>
-        </button>
-        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.85" />
-      </div>
-    </div>
-  </footer>
+  <!-- Elemen Audio Tersembunyi (Autoplay saat halaman dibuka) -->
+  <audio id="audioPlayer" src="love-story.mp3" preload="auto" autoplay></audio>
 
   <script>
     /* =========================================================================
        1. DATA LIRIK BERBASIS TIMESTAMP (DETIK)
        Disesuaikan untuk "Love Story (Taylor's Version)" (durasi 4:00).
-       Lengkapi baris lirik (dapat dicari melalui Google Search) pada tiap slot detik:
+       Lengkapi baris lirik pada tiap slot waktu sesuai file audio Anda:
        ========================================================================= */
     const lyrics = [
       { time: 0.0,   text: "♪ Love Story (Taylor's Version) — Taylor Swift ♪" },
@@ -578,112 +244,34 @@
     ];
 
     /* =========================================================================
-       2. KONTROL PEMUTAR AUDIO & SINKRONISASI LIRIK KARAOKE
+       2. AUTO-PLAY AUDIO & SINKRONISASI LIRIK KARAOKE TANPA UI PEMUTAR
        ========================================================================= */
     const audio = document.getElementById("audioPlayer");
-    const introOverlay = document.getElementById("introOverlay");
-    const startBtn = document.getElementById("startBtn");
-    const playPauseBtn = document.getElementById("playPauseBtn");
-    const playIcon = document.getElementById("playIcon");
-    const pauseIcon = document.getElementById("pauseIcon");
-    const discIcon = document.getElementById("discIcon");
-    const progressSlider = document.getElementById("progressSlider");
-    const currentTimeEl = document.getElementById("currentTimeEl");
-    const durationEl = document.getElementById("durationEl");
-    const volumeSlider = document.getElementById("volumeSlider");
-    const muteBtn = document.getElementById("muteBtn");
-    const audioFileInput = document.getElementById("audioFileInput");
-    const fileUploadLabel = document.getElementById("fileUploadLabel");
-    const songTitleDisplay = document.getElementById("songTitleDisplay");
-
     const lyricPrevEl = document.getElementById("lyricPrev");
     const lyricActiveEl = document.getElementById("lyricActive");
     const lyricNextEl = document.getElementById("lyricNext");
 
     let currentLyricIndex = -1;
-    audio.volume = 0.85;
+    audio.volume = 0.9;
 
-    // Tampilkan tombol unggah cadangan hanya jika love-story.mp3 tidak ditemukan
-    audio.addEventListener("error", () => {
-      fileUploadLabel.style.display = "inline-block";
-    });
-
-    function formatTime(sec) {
-      if (!isFinite(sec) || sec < 0) return "0:00";
-      const m = Math.floor(sec / 60);
-      const s = Math.floor(sec % 60);
-      return `${m}:${s < 10 ? "0" : ""}${s}`;
-    }
-
-    function updatePlayStateUI(isPlaying) {
-      playIcon.style.display = isPlaying ? "none" : "block";
-      pauseIcon.style.display = isPlaying ? "block" : "none";
-      discIcon.classList.toggle("playing", isPlaying);
-    }
-
-    function togglePlay() {
+    function ensureAudioPlaying() {
       if (audio.paused) {
-        audio.play().then(() => updatePlayStateUI(true)).catch(() => {
-          updatePlayStateUI(false);
-          fileUploadLabel.style.display = "inline-block";
+        audio.play().catch(() => {
+          // Jika kebijakan browser menunda autoplay sebelum interaksi pertama,
+          // audio akan otomatis berjalan saat pengguna menekan tombol Tap atau layar.
         });
-      } else {
-        audio.pause();
-        updatePlayStateUI(false);
       }
     }
 
-    // Tombol pembuka "Buka Kejutan"
-    startBtn.addEventListener("click", () => {
-      introOverlay.classList.add("hidden");
-      spawnInitialGarden();
-      audio.play().then(() => {
-        updatePlayStateUI(true);
-      }).catch(() => {
-        fileUploadLabel.style.display = "inline-block";
-        lyricActiveEl.textContent = "Pilih file lagu MP3 di bawah untuk memutar musik ♪";
-      });
+    // Coba langsung putar saat DOM siap dan saat halaman selesai dimuat
+    document.addEventListener("DOMContentLoaded", ensureAudioPlaying);
+    window.addEventListener("load", ensureAudioPlaying);
+
+    // Cadangan interaksi pertama agar audio langsung menyala bila autoplay sempat tertahan browser
+    ["pointerdown", "touchstart", "click", "keydown"].forEach((evt) => {
+      window.addEventListener(evt, ensureAudioPlaying, { once: true, passive: true });
     });
 
-    playPauseBtn.addEventListener("click", togglePlay);
-
-    // Muat file audio lokal jika menggunakan tombol cadangan
-    audioFileInput.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const objectUrl = URL.createObjectURL(file);
-      audio.src = objectUrl;
-      songTitleDisplay.textContent = file.name.replace(/\.[^/.]+$/, "");
-      currentLyricIndex = -1;
-      audio.play().then(() => updatePlayStateUI(true));
-    });
-
-    audio.addEventListener("loadedmetadata", () => {
-      durationEl.textContent = formatTime(audio.duration);
-      progressSlider.max = audio.duration || 100;
-    });
-
-    audio.addEventListener("ended", () => {
-      updatePlayStateUI(false);
-    });
-
-    // Progress bar scrubbing
-    progressSlider.addEventListener("input", () => {
-      audio.currentTime = parseFloat(progressSlider.value);
-    });
-
-    // Volume & Mute
-    volumeSlider.addEventListener("input", () => {
-      audio.volume = parseFloat(volumeSlider.value);
-      audio.muted = audio.volume === 0;
-    });
-
-    muteBtn.addEventListener("click", () => {
-      audio.muted = !audio.muted;
-      volumeSlider.value = audio.muted ? 0 : (audio.volume || 0.8);
-    });
-
-    // Pembaruan lirik sinkron (Karaoke-style)
     function syncLyrics(currentTime) {
       let activeIdx = 0;
       for (let i = 0; i < lyrics.length; i++) {
@@ -700,7 +288,6 @@
         lyricPrevEl.textContent = activeIdx > 0 ? lyrics[activeIdx - 1].text : "";
         lyricNextEl.textContent = activeIdx < lyrics.length - 1 ? lyrics[activeIdx + 1].text : "";
 
-        // Memicu ulang animasi fade-in & zoom-in saat baris berganti
         lyricActiveEl.style.animation = "none";
         void lyricActiveEl.offsetWidth;
         lyricActiveEl.textContent = lyrics[activeIdx].text;
@@ -709,17 +296,11 @@
     }
 
     audio.addEventListener("timeupdate", () => {
-      const t = audio.currentTime;
-      currentTimeEl.textContent = formatTime(t);
-      if (!progressSlider.matches(":active")) {
-        progressSlider.value = t;
-      }
-      syncLyrics(t);
+      syncLyrics(audio.currentTime);
     });
 
     /* =========================================================================
-       3. ENGINE ANIMASI 60FPS: PARTIKEL CAHAYA, KELOPAK, & BUNGA MEKAR ORGANIK
-       Mendukung Mawar (Rose), Sakura, dan Tulip + Klik/Sentuh untuk Mekar
+       3. ENGINE ANIMASI 60FPS: BUNGA BERTANGKAI MEKAR 15 DETIK (AWAL -> AKHIR)
        ========================================================================= */
     const canvas = document.getElementById("gardenCanvas");
     const ctx = canvas.getContext("2d");
@@ -742,15 +323,20 @@
     function easeOutCubic(t) {
       return 1 - Math.pow(1 - t, 3);
     }
+
+    function easeInOutSine(t) {
+      return -(Math.cos(Math.PI * t) - 1) / 2;
+    }
+
     function easeOutBack(t) {
-      const c1 = 1.70158;
+      const c1 = 1.45;
       const c3 = c1 + 1;
       return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
     }
 
     // --- Partikel Cahaya Hangat ---
     const particles = [];
-    const PARTICLE_COUNT = Math.min(55, Math.floor((width * height) / 18000));
+    const PARTICLE_COUNT = Math.min(60, Math.floor((width * height) / 16000));
 
     for (let i = 0; i < PARTICLE_COUNT; i++) {
       particles.push({
@@ -766,7 +352,7 @@
 
     // --- Kelopak Bunga Melayang ---
     const petals = [];
-    const PETAL_COUNT = Math.min(34, Math.floor(width / 32));
+    const PETAL_COUNT = Math.min(36, Math.floor(width / 30));
 
     function createPetal(randomY = false) {
       const colors = ["#ffb3c6", "#ff8fab", "#ffc2d1", "#ffe5ec", "#f49cbb"];
@@ -789,36 +375,47 @@
       petals.push(createPetal(true));
     }
 
-    // --- Riak Cahaya saat Layar Diklik ---
+    // --- Riak Cahaya saat Tombol Tap / Layar Diklik ---
     const ripples = [];
 
-    // --- Koleksi Bunga Mekar Organik ---
+    // --- Koleksi Bunga Mekar Bertangkai ---
     const flowers = [];
-    const MAX_FLOWERS = 46;
+    const MAX_FLOWERS = 65;
     const FLOWER_TYPES = ["rose", "sakura", "tulip"];
 
     class BloomingFlower {
-      constructor({ x, y, stemHeight, type, scale = 1, delay = 0, isUserSpawned = false }) {
+      constructor({
+        x,
+        y,
+        stemHeight,
+        type,
+        scale = 1,
+        delay = 0,
+        stemDuration = 2.4,
+        bloomDuration = 2.8,
+        isUserSpawned = false
+      }) {
         this.targetX = x;
         this.targetY = y;
-        this.stemHeight = stemHeight;
-        this.baseX = x + (Math.random() - 0.5) * 26;
-        this.baseY = y + stemHeight;
-        this.ctrlX = (this.baseX + x) / 2 + (Math.random() - 0.5) * 34;
+        this.stemHeight = Math.max(45, stemHeight);
+        this.baseX = x + (Math.random() - 0.5) * 34;
+        this.baseY = y + this.stemHeight;
+        this.ctrlX = (this.baseX + x) / 2 + (Math.random() - 0.5) * 44;
         this.ctrlY = (this.baseY + y) / 2;
 
         this.type = type;
         this.maxScale = scale;
         this.delay = delay;
+        this.stemDuration = stemDuration;
+        this.bloomDuration = bloomDuration;
         this.isUserSpawned = isUserSpawned;
 
         this.age = 0;
-        this.stemDuration = stemHeight > 0 ? 1.1 : 0.01;
-        this.bloomDuration = 1.4;
         this.swayPhase = Math.random() * Math.PI * 2;
-        this.rotation = (Math.random() - 0.5) * 0.35;
+        this.rotation = (Math.random() - 0.5) * 0.32;
         this.alpha = 1;
         this.fadingOut = false;
+        this.currentSway = 0;
 
         if (type === "rose") {
           const palettes = [
@@ -850,9 +447,25 @@
         }
         this.age += dt;
         if (this.fadingOut) {
-          this.alpha -= dt * 0.6;
+          this.alpha -= dt * 0.55;
         }
-        this.currentSway = Math.sin(time * 1.4 + this.swayPhase) * 4.5 * this.maxScale;
+        this.currentSway = Math.sin(time * 1.35 + this.swayPhase) * 5.0 * this.maxScale;
+      }
+
+      // Titik pada kurva Bezier kuadratik tangkai (t dari 0 ke 1)
+      getStemPoint(t, swayOffset) {
+        const inv = 1 - t;
+        const p0x = this.baseX;
+        const p0y = this.baseY;
+        const p1x = this.ctrlX + swayOffset * 0.5;
+        const p1y = this.ctrlY;
+        const p2x = this.targetX + swayOffset;
+        const p2y = this.targetY;
+
+        return {
+          x: inv * inv * p0x + 2 * inv * t * p1x + t * t * p2x,
+          y: inv * inv * p0y + 2 * inv * t * p1y + t * t * p2y
+        };
       }
 
       draw(ctx) {
@@ -861,57 +474,69 @@
         ctx.save();
         ctx.globalAlpha = Math.max(0, this.alpha);
 
-        const stemProgress = Math.min(1, this.age / this.stemDuration);
-        const easedStem = easeOutCubic(stemProgress);
+        // 1. Progres pertumbuhan tangkai (0 -> 1)
+        const stemRaw = Math.min(1, this.age / this.stemDuration);
+        const easedStem = easeInOutSine(stemRaw);
 
-        const bloomRaw = Math.max(0, (this.age - this.stemDuration * 0.55) / this.bloomDuration);
+        // 2. Progres mekarnya bunga mulai dari kuncup kecil (saat tangkai 55%) hingga mekar penuh
+        const bloomStart = this.stemDuration * 0.55;
+        const bloomRaw = Math.max(0, (this.age - bloomStart) / this.bloomDuration);
         const bloomProgress = Math.min(1, bloomRaw);
         const easedBloom = easeOutBack(bloomProgress);
 
-        const headX = this.targetX + this.currentSway * easedStem;
-        const headY = this.targetY;
+        const sway = this.currentSway * easedStem;
+        const tip = this.getStemPoint(easedStem, sway);
 
-        if (this.stemHeight > 0 && easedStem > 0) {
-          const curX = this.baseX + (headX - this.baseX) * easedStem;
-          const curY = this.baseY + (headY - this.baseY) * easedStem;
-          const curCtrlX = this.baseX + (this.ctrlX + this.currentSway * 0.5 - this.baseX) * easedStem;
-          const curCtrlY = this.baseY + (this.ctrlY - this.baseY) * easedStem;
-
-          const stemGrad = ctx.createLinearGradient(this.baseX, this.baseY, curX, curY);
-          stemGrad.addColorStop(0, "#143d29");
-          stemGrad.addColorStop(1, "#2d6a4f");
+        // Gambar Tangkai Bertahap
+        if (easedStem > 0.01) {
+          const stemGrad = ctx.createLinearGradient(this.baseX, this.baseY, tip.x, tip.y);
+          stemGrad.addColorStop(0, "#123824");
+          stemGrad.addColorStop(0.55, "#245c43");
+          stemGrad.addColorStop(1, "#40916c");
 
           ctx.strokeStyle = stemGrad;
-          ctx.lineWidth = 2.6 * this.maxScale;
+          ctx.lineWidth = (2.2 + 0.8 * easedStem) * this.maxScale;
           ctx.lineCap = "round";
+
           ctx.beginPath();
-          ctx.moveTo(this.baseX, this.baseY);
-          ctx.quadraticCurveTo(curCtrlX, curCtrlY, curX, curY);
+          const steps = 18;
+          for (let s = 0; s <= steps; s++) {
+            const t = (s / steps) * easedStem;
+            const pt = this.getStemPoint(t, sway);
+            if (s === 0) ctx.moveTo(pt.x, pt.y);
+            else ctx.lineTo(pt.x, pt.y);
+          }
           ctx.stroke();
 
-          if (easedStem > 0.45) {
-            const leafScale = Math.min(1, (easedStem - 0.45) / 0.55) * this.maxScale;
-            const leafX = (this.baseX + curX) * 0.52;
-            const leafY = (this.baseY + curY) * 0.55;
-            this.drawLeaf(ctx, leafX, leafY, -0.65, leafScale);
-            if (this.stemHeight > 90) {
-              this.drawLeaf(ctx, leafX + 3, leafY - 18 * leafScale, 0.65, leafScale * 0.88);
-            }
+          // Daun pertama tumbuh saat tangkai melewati 35%
+          if (easedStem > 0.35) {
+            const leaf1Prog = Math.min(1, (easedStem - 0.35) / 0.35);
+            const leaf1Pos = this.getStemPoint(0.35, sway);
+            this.drawLeaf(ctx, leaf1Pos.x, leaf1Pos.y, -0.68, easeOutCubic(leaf1Prog) * this.maxScale);
+          }
+
+          // Daun kedua tumbuh saat tangkai melewati 62%
+          if (easedStem > 0.62 && this.stemHeight > 85) {
+            const leaf2Prog = Math.min(1, (easedStem - 0.62) / 0.35);
+            const leaf2Pos = this.getStemPoint(0.62, sway);
+            this.drawLeaf(ctx, leaf2Pos.x, leaf2Pos.y, 0.68, easeOutCubic(leaf2Prog) * this.maxScale * 0.9);
+          }
+
+          // Daun ketiga untuk tangkai yang tinggi
+          if (easedStem > 0.8 && this.stemHeight > 185) {
+            const leaf3Prog = Math.min(1, (easedStem - 0.8) / 0.2);
+            const leaf3Pos = this.getStemPoint(0.8, sway);
+            this.drawLeaf(ctx, leaf3Pos.x, leaf3Pos.y, -0.58, easeOutCubic(leaf3Prog) * this.maxScale * 0.78);
           }
         }
 
+        // Gambar Kuncup hingga Kelopak Mekar Penuh di Ujung Tangkai
         if (bloomProgress > 0) {
-          const drawX = this.stemHeight > 0
-            ? this.baseX + (headX - this.baseX) * easedStem
-            : headX;
-          const drawY = this.stemHeight > 0
-            ? this.baseY + (headY - this.baseY) * easedStem
-            : headY;
-
-          ctx.translate(drawX, drawY);
-          ctx.rotate(this.rotation + this.currentSway * 0.015);
-          const s = Math.max(0.01, easedBloom * this.maxScale);
-          ctx.scale(s, s);
+          ctx.translate(tip.x, tip.y);
+          ctx.rotate(this.rotation + sway * 0.015);
+          // Mulai dari kuncup kecil (0.18) lalu membesar & mekar penuh (1.0)
+          const budToFullScale = (0.18 + 0.82 * Math.max(0, easedBloom)) * this.maxScale;
+          ctx.scale(budToFullScale, budToFullScale);
 
           if (this.type === "rose") {
             this.drawRose(ctx, bloomProgress);
@@ -926,6 +551,7 @@
       }
 
       drawLeaf(ctx, x, y, angle, scale) {
+        if (scale <= 0.01) return;
         ctx.save();
         ctx.translate(x, y);
         ctx.rotate(angle);
@@ -939,7 +565,7 @@
         ctx.fill();
 
         ctx.strokeStyle = "#52b788";
-        ctx.lineWidth = 0.8;
+        ctx.lineWidth = 0.85;
         ctx.beginPath();
         ctx.moveTo(2, 0);
         ctx.lineTo(23, 0);
@@ -957,12 +583,12 @@
         ];
 
         layers.forEach((layer, idx) => {
-          const layerOpen = Math.min(1, progress * (1.35 - idx * 0.12));
+          const layerOpen = Math.min(1, Math.max(0.15, progress * (1.3 - idx * 0.14)));
           for (let i = 0; i < layer.count; i++) {
             ctx.save();
             const theta = (i / layer.count) * Math.PI * 2 + layer.rotOffset;
             ctx.rotate(theta);
-            const r = layer.radius * (0.45 + 0.55 * layerOpen);
+            const r = layer.radius * (0.35 + 0.65 * layerOpen);
 
             ctx.fillStyle = layer.color;
             ctx.shadowColor = "rgba(25, 4, 18, 0.35)";
@@ -980,7 +606,7 @@
 
       drawSakura(ctx, progress) {
         const petalCount = 5;
-        const r = 24 * (0.4 + 0.6 * progress);
+        const r = 24 * (0.3 + 0.7 * progress);
 
         for (let i = 0; i < petalCount; i++) {
           ctx.save();
@@ -1025,7 +651,7 @@
       }
 
       drawTulip(ctx, progress) {
-        const openSpread = 0.25 + 0.75 * progress;
+        const openSpread = 0.15 + 0.85 * progress;
         const h = 34;
         const w = 15;
 
@@ -1037,7 +663,7 @@
         ctx.fill();
 
         ctx.save();
-        ctx.rotate(-0.22 * openSpread);
+        ctx.rotate(-0.24 * openSpread);
         ctx.fillStyle = this.palette.left;
         ctx.beginPath();
         ctx.moveTo(0, 4);
@@ -1047,7 +673,7 @@
         ctx.restore();
 
         ctx.save();
-        ctx.rotate(0.22 * openSpread);
+        ctx.rotate(0.24 * openSpread);
         ctx.fillStyle = this.palette.right;
         ctx.beginPath();
         ctx.moveTo(0, 4);
@@ -1068,74 +694,156 @@
       flowers.push(new BloomingFlower(config));
     }
 
-    function spawnInitialGarden() {
+    /* =========================================================================
+       4. RANGKAIAN BANYAK BUNGA BERTANGKAI MEKAR SELAMA 15 DETIK (0s -> 15s)
+       ========================================================================= */
+    function spawnFifteenSecondGarden() {
       flowers.length = 0;
 
-      const bottomCount = width < 600 ? 7 : 13;
-      for (let i = 0; i < bottomCount; i++) {
-        const ratio = (i + 0.5) / bottomCount;
-        const x = ratio * width + (Math.random() - 0.5) * 25;
-        const stemH = 75 + Math.random() * 95;
+      // Total waktu dari bunga pertama mulai tumbuh hingga bunga terakhir mekar penuh = 15 detik
+      const TOTAL_SEQUENCE_SECONDS = 15.0;
+      const STEM_GROW_TIME = 2.4;
+      const BLOOM_OPEN_TIME = 2.8;
+      // Durasi satu bunga dari tunas sampai mekar penuh = 0.55 * 2.4 + 2.8 = 4.12 detik
+      const SINGLE_FLOWER_DURATION = STEM_GROW_TIME * 0.55 + BLOOM_OPEN_TIME;
+      const MAX_START_DELAY = Math.max(0, TOTAL_SEQUENCE_SECONDS - SINGLE_FLOWER_DURATION);
+
+      const totalFlowers = width < 600 ? 22 : 34;
+
+      for (let i = 0; i < totalFlowers; i++) {
+        // Sebar posisi horizontal merata dari kiri ke kanan
+        const ratio = (i + 0.5) / totalFlowers;
+        const x = ratio * width + (Math.random() - 0.5) * (width / totalFlowers) * 0.75;
+
+        // Variasi tinggi tangkai bertingkat (lapis belakang tinggi, sisi tepi lebih tinggi, tengah lebih rendah agar lirik tetap terbaca)
+        const distFromCenter = Math.abs(ratio - 0.5) * 2; // 0 di tengah, 1 di tepi
+        const baseStem = width < 600 ? 85 : 115;
+        const extraSideHeight = distFromCenter * (height * 0.24);
+        const layerVariation = (i % 3) * (width < 600 ? 34 : 52);
+        const stemHeight = Math.min(height * 0.58, baseStem + extraSideHeight + layerVariation + Math.random() * 35);
+
+        // Penjadwalan bertahap dari 0 detik hingga 15 detik (mekar dari tengah menyebar & berlapis)
+        const waveProgress = i / (totalFlowers - 1);
+        const delay = waveProgress * MAX_START_DELAY;
+
         const type = FLOWER_TYPES[i % FLOWER_TYPES.length];
+        const baseScale = width < 600 ? 0.78 : 0.94;
+
         addFlower({
           x,
-          y: height - stemH,
-          stemHeight: stemH,
+          y: height - stemHeight,
+          stemHeight,
           type,
-          scale: (width < 600 ? 0.78 : 0.95) + Math.random() * 0.25,
-          delay: i * 0.14
+          scale: baseScale + (i % 3) * 0.1 + Math.random() * 0.12,
+          delay,
+          stemDuration: STEM_GROW_TIME,
+          bloomDuration: BLOOM_OPEN_TIME,
+          isUserSpawned: false
         });
       }
-
-      const cornerSpots = [
-        { x: 42, y: 85, type: "sakura", scale: 0.95, delay: 0.4 },
-        { x: 88, y: 130, type: "rose", scale: 0.85, delay: 0.7 },
-        { x: width - 46, y: 92, type: "sakura", scale: 0.95, delay: 0.5 },
-        { x: width - 92, y: 138, type: "tulip", scale: 0.85, delay: 0.8 },
-        { x: width * 0.14, y: height * 0.46, type: "sakura", scale: 0.75, delay: 1.1 },
-        { x: width * 0.86, y: height * 0.48, type: "rose", scale: 0.75, delay: 1.25 }
-      ];
-
-      cornerSpots.forEach(spot => {
-        addFlower({
-          x: spot.x,
-          y: spot.y,
-          stemHeight: 0,
-          type: spot.type,
-          scale: width < 600 ? spot.scale * 0.8 : spot.scale,
-          delay: spot.delay
-        });
-      });
     }
 
-    function handleCanvasInteract(clientX, clientY) {
+    // Langsung jalankan taman bunga 15 detik saat website dibuka
+    spawnFifteenSecondGarden();
+
+    /* =========================================================================
+       5. INTERAKSI BUNGA BARU & 3 TOMBOL TAP ACAK (MUNCUL 300ms, JEDA 1 DETIK)
+       ========================================================================= */
+    function spawnInteractiveStemmedFlower(x, y) {
+      ensureAudioPlaying();
+
       const randomType = FLOWER_TYPES[Math.floor(Math.random() * FLOWER_TYPES.length)];
-      const stemH = clientY > height * 0.68 ? Math.min(85, height - clientY) : 0;
+      // Tangkai tumbuh dari bawah titik sentuh (minimal 85px hingga maksimal 230px)
+      const stemH = Math.min(230, Math.max(85, height - y));
 
       addFlower({
-        x: clientX,
-        y: clientY,
+        x,
+        y,
         stemHeight: stemH,
         type: randomType,
-        scale: 0.85 + Math.random() * 0.35,
+        scale: (width < 600 ? 0.85 : 1.0) + Math.random() * 0.25,
         delay: 0,
+        stemDuration: 1.2,
+        bloomDuration: 1.5,
         isUserSpawned: true
       });
 
       ripples.push({
-        x: clientX,
-        y: clientY,
-        radius: 4,
-        maxRadius: 46,
-        alpha: 0.75
+        x,
+        y,
+        radius: 6,
+        maxRadius: 52,
+        alpha: 0.85
       });
     }
 
     canvas.addEventListener("pointerdown", (e) => {
-      handleCanvasInteract(e.clientX, e.clientY);
+      spawnInteractiveStemmedFlower(e.clientX, e.clientY);
     });
 
-    // Loop Animasi Utama 60fps
+    // Logika 3 Tombol Tap Acak: tampil 300ms -> sembunyi 1000ms -> ulangi
+    const tapButtons = [
+      document.getElementById("tapBtn0"),
+      document.getElementById("tapBtn1"),
+      document.getElementById("tapBtn2")
+    ];
+
+    tapButtons.forEach((btn) => {
+      btn.addEventListener("pointerdown", (e) => {
+        e.stopPropagation();
+        const rect = btn.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        btn.classList.remove("visible");
+        spawnInteractiveStemmedFlower(cx, cy);
+      });
+    });
+
+    function getThreeRandomPositions() {
+      const marginX = Math.max(55, width * 0.12);
+      const marginY = Math.max(70, height * 0.15);
+      const minDistance = Math.min(130, width * 0.24);
+      const positions = [];
+
+      for (let i = 0; i < 3; i++) {
+        let candidate = { x: width / 2, y: height / 2 };
+        for (let attempt = 0; attempt < 25; attempt++) {
+          const rx = marginX + Math.random() * Math.max(20, width - marginX * 2);
+          const ry = marginY + Math.random() * Math.max(20, height - marginY * 2);
+          const tooClose = positions.some((p) => Math.hypot(p.x - rx, p.y - ry) < minDistance);
+          candidate = { x: rx, y: ry };
+          if (!tooClose) break;
+        }
+        positions.push(candidate);
+      }
+      return positions;
+    }
+
+    function runRandomTapCycle() {
+      const positions = getThreeRandomPositions();
+
+      // Munculkan 3 tombol Tap di titik acak selama 300ms
+      tapButtons.forEach((btn, idx) => {
+        btn.style.left = `${positions[idx].x}px`;
+        btn.style.top = `${positions[idx].y}px`;
+        btn.classList.add("visible");
+      });
+
+      setTimeout(() => {
+        // Sembunyikan setelah 300ms
+        tapButtons.forEach((btn) => btn.classList.remove("visible"));
+
+        // Jeda 1 detik (1000ms), lalu munculkan lagi di titik acak baru
+        setTimeout(runRandomTapCycle, 1000);
+      }, 300);
+    }
+
+    // Mulai siklus 3 tombol Tap acak
+    setTimeout(runRandomTapCycle, 400);
+
+    /* =========================================================================
+       6. LOOP ANIMASI UTAMA 60FPS
+       ========================================================================= */
     let lastTimestamp = performance.now();
 
     function animate(now) {
@@ -1145,6 +853,7 @@
 
       ctx.clearRect(0, 0, width, height);
 
+      // 1. Partikel Cahaya Hangat
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
         p.x += p.vx;
@@ -1163,6 +872,7 @@
         ctx.fill();
       }
 
+      // 2. Kelopak Bunga Melayang
       for (let i = 0; i < petals.length; i++) {
         const pt = petals[i];
         pt.y += pt.vy;
@@ -1187,23 +897,25 @@
         ctx.restore();
       }
 
+      // 3. Riak Cahaya Interaktif
       for (let i = ripples.length - 1; i >= 0; i--) {
         const rp = ripples[i];
-        rp.radius += dt * 75;
-        rp.alpha -= dt * 1.1;
+        rp.radius += dt * 80;
+        rp.alpha -= dt * 1.15;
         if (rp.alpha <= 0) {
           ripples.splice(i, 1);
           continue;
         }
         ctx.save();
         ctx.strokeStyle = `rgba(255, 214, 228, ${rp.alpha})`;
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 1.6;
         ctx.beginPath();
         ctx.arc(rp.x, rp.y, rp.radius, 0, Math.PI * 2);
         ctx.stroke();
         ctx.restore();
       }
 
+      // 4. Semua Bunga Bertangkai Mekar
       for (let i = flowers.length - 1; i >= 0; i--) {
         const fl = flowers[i];
         fl.update(dt, timeSec);
@@ -1220,4 +932,4 @@
     requestAnimationFrame(animate);
   </script>
 </body>
-</html>
+  </html>
